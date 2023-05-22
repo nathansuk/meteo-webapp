@@ -36,7 +36,7 @@ export default function Login()
 
                 <div className={styles.separator}></div>
 
-                <span>Nouveau sur Meteo ? <Link href="/register" className={styles.registerLink}>Inscrivez-vous</Link></span>
+                <span className={styles.registerPhrase}>Nouveau sur Meteo ? <Link href="/register" className={styles.registerLink}>Inscrivez-vous</Link></span>
 
             </div>
         

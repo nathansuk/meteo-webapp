@@ -1,3 +1,5 @@
+
+
 .main {
     height: 100vh;
     color: black;
@@ -145,3 +147,40 @@
     font-size: 25px;
     margin: auto;
 }
+
+@media screen and (max-width: 800px) {
+    .main {
+        width: 100%;
+        display: flex ;
+        flex-direction: column;
+    }
+
+    .loginLeft, .loginRight {
+        margin-top: 70px;
+        height: 100vh;
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 520px) {
+
+    .loginLeft, .loginRight {
+        margin-top: 70px;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .loginRight {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+    
+    .loginLeft {
+        height: 500px;
+    }
+
+
+
+}
+

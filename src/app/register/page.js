@@ -10,6 +10,8 @@ export default function Register()
 {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [showErrors, setShowErrors] = useState(false)
+    const [errors, setErrors] = useState([])
 
     async function registerUser () {
         try {
@@ -25,7 +27,13 @@ export default function Register()
             })
 
             const jsonResponse = await response.json()
-            console.log("JSON response", jsonResponse)
+
+            if(jsonResponse.errors)
+            {
+                setShowErrors(true)
+                setErrors(jsonResponse.errors)
+            }
+            
 
 
         } catch(err) {
@@ -41,15 +49,23 @@ export default function Register()
         
         <h1 className={[loginStyles.loginTitle, styles.registerFormTitle ]}>Inscription</h1>
         
-        <div className={styles.registerFormError}>
-            <div className={styles.registerFormErrorTitle}>
-                <h2>Erreurs</h2>
+        {
+            showErrors &&
+            <div className={styles.registerFormError}>
+                <div className={styles.registerFormErrorTitle}>
+                    <h2>Erreurs</h2>
+                </div>
+                <div className={styles.errorList}>
+                    {
+                        errors.map((error, index) => {
+                            return <span> • {error}</span>
+                        })
+                    }
+                </div>
             </div>
-            <div className={styles.errorList}>
-                <span>- Erreur 1</span>
-                <span>- Erreur 2</span>
-            </div>
-        </div>
+        }
+        
+    
 
         <form onSubmit={(e) => {
             e.preventDefault() 

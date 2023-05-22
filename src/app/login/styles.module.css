@@ -1,0 +1,147 @@
+.main {
+    height: 100vh;
+    color: black;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+.loginLeft {
+    display: flex;
+    width: 50%;
+}
+
+.loginView {
+    width: 500px;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.loginTitle {
+    font-size: 50px
+}
+
+.loginTitleCaption {
+    color: rgb(165, 165, 165);
+}
+
+.googleAuth {
+    height: 50px;
+    border: 2px solid rgb(214, 213, 213);
+    text-align: center;
+    background-color: white;
+    color: black;
+    margin-top: 30px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.googleAuthImage {
+    margin-right: 15px;
+}
+
+.googleAuthText {
+    margin-top: -10px;
+    position: relative;
+    top: -5px;
+    color:black;
+}
+
+.loginSeparator {
+    margin: 30px auto 20px auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.lineSeparator {
+    margin: 10px;
+    width: 80px;
+    height: 1px;
+    background-color: rgb(204, 202, 202);
+}
+
+.loginSeparatorText {
+    color: rgb(167, 165, 165);
+}
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.loginFormInput {
+    color: black;
+    background-color: white;
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+    font-size: 15px;
+    border: 2px solid rgb(214, 213, 213);
+}
+
+.loginFormInput:hover {
+    border: 2px solid rgb(180, 180, 180);
+    transition: 0.3s
+}
+
+.loginFormInput:focus-visible {
+    outline: none;
+}
+
+.forgotPasswordLink {
+    text-align: right;
+    color: rgb(111, 99, 219);
+    margin: 10px 0 20px 0;
+    font-weight: 400;
+}
+
+.loginButton {
+    margin-top: 10px;
+    height: 50px;
+    background-color: #3498db;
+    border: none;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+    background-color: #2980b9;
+    transition: 0.3s;
+}
+
+.separator {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 80%;
+    margin: 20px auto 20px auto;
+    height: 1px;
+    background-color: rgb(204, 202, 202);
+}
+
+.registerLink {
+    color: rgb(111, 99, 219);
+    font-weight: bolder;
+}
+
+
+.loginRight {
+    width: 50%;
+    height: 100vh;
+    background-color: rgb(221, 221, 221);
+    background-image: url('/loginPage.jpg');
+    background-position-x: -500px;
+    text-align: center;
+    display: flex;
+}
+
+.loginQuote {
+    width: 80%;
+    font-weight: 500;
+    font-size: 25px;
+    margin: auto;
+}

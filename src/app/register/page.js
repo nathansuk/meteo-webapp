@@ -8,16 +8,23 @@ import {useState} from "react"
 
 export default function Register()
 {
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const [buttonText, setButtonText] = useState("Inscription")
     const [showErrors, setShowErrors] = useState(false)
     const [errors, setErrors] = useState([])
 
     async function registerUser () {
+        setButtonText("Chargement ...")
         try {
             const response = await fetch('/auth/register', {
                 method: 'POST',
                 body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
                     email: email,
                     password: password
                 }),
@@ -32,10 +39,9 @@ export default function Register()
             {
                 setShowErrors(true)
                 setErrors(jsonResponse.errors)
+                setButtonText("Inscription")
             }
             
-
-
         } catch(err) {
             console.log(err)
         }
@@ -72,6 +78,27 @@ export default function Register()
             registerUser()
         }} 
         className={styles.registerForm}>
+            
+            <div className={styles.registerRowInput}>
+                <input 
+                    type='text' 
+                    name='firstName' 
+                    placeholder='Prénom'
+                    onChange = {(e) => { setFirstName(e.target.value)}}
+                    value = {firstName}
+                    className={loginStyles.loginFormInput}>
+                </input>
+
+                <input 
+                    type='text' 
+                    name='lastName' 
+                    placeholder='Nom'
+                    onChange = {(e) => { setLastName(e.target.value)}}
+                    value = {lastName}
+                    className={loginStyles.loginFormInput}>
+                </input>
+            </div>
+        
 
             <input 
                 type='email' 
@@ -92,7 +119,7 @@ export default function Register()
                 minLength={8}>
             </input>
 
-            <button type='submit' className={loginStyles.loginButton}>Inscription</button>
+            <button type='submit' className={loginStyles.loginButton}>{buttonText}</button>
 
             <Link href="/login" className={styles.backLogin}> &larr; Retour </Link>
 

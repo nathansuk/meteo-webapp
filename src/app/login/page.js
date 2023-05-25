@@ -1,9 +1,61 @@
+'use client'
 import styles from './styles.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from "react"
+import { NextResponse } from 'next/server'
+import {useState, useEffect} from "react"
+import withAuth from '../middleware/auth'
 
 export default function Login()
 {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState([])
+
+    useEffect( () => {
+        const token = localStorage.getItem('session_token')
+        if(token)
+        {
+            window.location.href = '/dashboard'
+        }
+    })
+
+    async function loginUser() {
+
+        try {
+            const response = await fetch("/auth/login", {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+                headers: {
+                    "content-type": "application/json"
+                }
+            })
+
+            const jsonResponse = await response.json()
+
+            if(jsonResponse.errors)
+            {
+                setErrors(jsonResponse.errors)
+                console.log(errors)
+                return
+            }
+
+            localStorage.setItem('session_token', jsonResponse.token)
+            window.location.href('/dashboard')
+            console.log(jsonResponse)
+
+
+        } catch(err) {
+            console.log(err)
+        }
+
+    }
+
     return (
         <main className={styles.main}>
 
@@ -25,9 +77,29 @@ export default function Login()
                         <div className={styles.lineSeparator}></div>
                 </div>
 
-                <form method="POST" action="" className={styles.loginForm}>
-                    <input type="text" name="email" placeholder="Adresse mail" className={styles.loginFormInput}></input>
-                    <input type="password" name="password" placeholder="Mot de passe" className={styles.loginFormInput}></input>
+                <form onSubmit={(e) => {
+                    e.preventDefault()
+                    loginUser()
+                }} 
+                className={styles.loginForm}>
+
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Adresse mail"
+                        onChange={(e) => { setEmail(e.target.value)}}
+                        value={email}
+                        className={styles.loginFormInput}>
+                    </input>
+
+                    <input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Mot de passe" 
+                        onChange={(e) => { setPassword(e.target.value)}}
+                        value={password}
+                        className={styles.loginFormInput}>
+                    </input>
 
                     <a href='#' className={styles.forgotPasswordLink}>Mot de passe oublié ?</a>
 

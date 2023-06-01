@@ -3,12 +3,72 @@ import styles from './styles.module.css'
 import Image from 'next/image'
 import React from 'react'
 import {useState, useEffect} from 'react'
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
 
 export default function Dashboard()
 {
 
+    ChartJS.register(
+        CategoryScale,
+        LinearScale,
+        PointElement,
+        LineElement,
+        Title,
+        Tooltip,
+        Legend
+      );
+
     const [user, setUser] = useState({})
     const [errors, setErrors] = useState([])
+    const [stationData, setStationData] = useState()
+
+    const [stationDataPressure, setStationDataPressure] = useState([])
+    const [stationDataPressureDate, setStationDataPressureDate] = useState([])
+
+    async function getStationData()
+    {
+        try {
+
+            const response = await fetch('/station/data/ESIEE-1', {
+                method: 'GET'
+            })
+
+            const data = await response.json()
+            setStationData(data)
+
+            const pressureDatas = []
+            const dataDates = []
+
+            data.forEach(item => {
+                pressureDatas.push(item.datas.pressure)
+                const dateFormatted = new Date(item.dataDate)
+                dataDates.push(dateFormatted.getHours() + " : " + dateFormatted.getMinutes())
+            });
+
+            
+            setStationDataPressure(pressureDatas)
+            setStationDataPressureDate(dataDates)
+
+            console.log(pressureDatas)
+            console.log(dataDates)
+
+        } catch(err) {
+            console.log("Erreur lors de la récupération des données de la station" + err)
+            setErrors(err)
+        }
+    }
+
+
 
     async function getUser(token) {
 
@@ -35,6 +95,13 @@ export default function Dashboard()
     
     }
 
+    const logout = (e) => {
+        e.preventDefault()
+        localStorage.removeItem('session_token')
+        window.location.href = '/login'
+        return
+    }
+
     
     useEffect( () => {
         const token = localStorage.getItem('session_token')
@@ -45,7 +112,43 @@ export default function Dashboard()
         }
 
         getUser(token)
+        getStationData()
     }, [])
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+          position: 'top',
+        },
+        title: {
+          display: false,
+          text: 'Chart.js Line Chart',
+        },
+      },
+    };
+
+    const labels = stationDataPressureDate
+
+    const data = {
+      labels,
+      datasets: [
+        {
+          label: 'Dataset 1',
+          data: stationDataPressure,
+          tension: 0.4,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+        {
+            label: 'Dataset 2',
+            data: stationDataPressureDate,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          }
+      ],
+    };
 
     return (
 
@@ -90,10 +193,55 @@ export default function Dashboard()
 
                     </div>
                 
-                <button className={styles.navigationLogoutButton}>Déconnexion</button>
+                <button 
+                className={styles.navigationLogoutButton}
+                onClick={logout}>Déconnexion</button>
 
+                
                 </div>  
 
+                <div className={styles.dashboardContent}>
+
+                    <h1>Bienvenue, </h1>
+
+                    <div className={styles.dashboardContentBoxes}>
+
+                        <div className={styles.dashboardContentBox}>
+                            <h2>Nombre de station</h2>
+                            <div className={styles.boxContent}>
+                                <i class="fi fi-sr-marker dashboardContentBoxIcon" style={{marginRight: 30, marginTop: 30}}></i>
+                                <h1>5</h1>
+                            </div>
+                        </div>
+
+                        <div className={styles.dashboardContentBox}>
+                            <h2>Stat au pif</h2>
+                            <div className={styles.boxContent}>
+                                <i class="fi fi-sr-info dashboardContentBoxIcon" style={{marginRight: 30, marginTop: 30}}></i>
+                                <h1>38</h1>
+                            </div>
+                        </div>
+
+                        <div className={styles.dashboardContentBox}>
+                            <h2>Ajouter une station</h2>
+                            <div className={styles.boxContent}>
+                                
+                                <h1>C'est ici</h1>
+                            </div>
+                        </div>
+
+
+                    </div>  
+
+
+                    <h2>Station favorite (ESIEE-1)</h2>
+
+                    <div className={styles.dashboardStationBox}>
+                        <h2><i class="fi fi-sr-dashboard"></i>Pression</h2>
+                        <Line options={options} data={data} />
+                    </div>
+
+                </div>  
 
 
 

@@ -12,6 +12,7 @@ export default function Login()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [showErrors, setShowErrors] = useState(false)
     const [errors, setErrors] = useState([])
 
     useEffect( () => {
@@ -41,12 +42,13 @@ export default function Login()
             if(jsonResponse.errors)
             {
                 setErrors(jsonResponse.errors)
+                setShowErrors(true)
                 console.log(errors)
                 return
             }
 
             localStorage.setItem('session_token', jsonResponse.token)
-            window.location.href('/dashboard')
+            window.location.href = '/dashboard'
             console.log(jsonResponse)
 
 
@@ -82,7 +84,28 @@ export default function Login()
                     loginUser()
                 }} 
                 className={styles.loginForm}>
+                    
+                    {
+                        showErrors &&
+                        <div className={styles.loginErrors}>
 
+                        <div className={styles.loginErrorsTitle}>
+                            Erreurs
+                        </div>
+
+                        <div className={styles.loginErrorsList}>
+                            {
+                                errors.map((error, index) => {
+                                    return <span className={styles.loginErrorElement}> • {error}</span>
+                                })
+                            }
+                        </div>
+
+
+                    </div>
+
+                    }
+                
                     <input 
                         type="email" 
                         name="email" 

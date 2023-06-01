@@ -163,6 +163,39 @@
 
 }
 
+.loginErrors {
+    width: 100%;
+    margin-bottom: 20px
+}
+
+.loginErrorsTitle {
+    background-color: #ff7675;
+    height: 30px;
+    color: white;
+    font-weight: bolder;
+    text-align: left;
+    padding-left: 20px;
+    padding-top: 5px;
+    border-radius: 10px 10px 0 0;
+}
+
+.loginErrorsList {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 10px 0 20px 20px;
+    font-size: 13px;
+    color: #ff7675;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.01), 0 4px 4px rgba(0, 0, 0, 0.02),
+    0 8px 8px rgba(0, 0, 0, 0.03), 0 18px 18px rgba(0, 0, 0, 0.04),
+    0 28px 28px rgba(0, 0, 0, 0.05), 0 38px 38px rgba(0, 0, 0, 0.06);
+}
+
+.loginErrorElement {
+    margin-top: 5px;
+}
+
 @media screen and (max-width: 520px) {
 
     .loginLeft, .loginRight {

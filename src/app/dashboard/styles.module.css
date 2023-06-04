@@ -180,6 +180,7 @@
     border-radius: 10px;
     margin-top: 20px;
     color: black;
+    margin-left: 15px;
 }
 
 .dashboardStationBox > h2 {
@@ -190,4 +191,10 @@
     margin-right: 10px;
     position: relative;
     top: 3px;
+}
+
+.statsBoxes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }

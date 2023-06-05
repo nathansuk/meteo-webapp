@@ -18,6 +18,14 @@ const nextConfig = {
             source: "/station/data/:stationId",
             destination: "http://localhost:8080/station/data/:stationId",
           },
+          {
+            source: "/user/change-infos",
+            destination: "http://localhost:8080/user/change-infos",
+          },
+          {
+            source: "/user/change-password",
+            destination: "http://localhost:8080/user/change-password",
+          },
         ];
       },
 }

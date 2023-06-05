@@ -44,8 +44,8 @@ export default function Menu({ firstName, lastName, onMenuItemClick})
             <nav className={styles.navigationList}>
                 <ul className={styles.elements}>
                     <li onClick={() => onMenuItemClick('landing')} className={styles.element}><span className={styles.elementContent}><i className="fi fi-rr-apps elementIcone"></i><span className={styles.elementText}>Accueil</span></span></li>
-                    <li onClick={() => onMenuItemClick('apparels')} className={styles.element}><span className={styles.elementContent}><i className="fi fi-rr-marker elementIcone"></i><span className={styles.elementText}>Appareil</span></span></li>
-                    <li onClick={() => onMenuItemClick('account')} className={styles.element}><span className={styles.elementContent}><i className="fi fi-rr-user elementIcone"></i><span className={styles.elementText}>Mon compte</span></span></li>
+                    <li onClick={() => onMenuItemClick('apparels')} className={styles.element}><span className={styles.elementContent}><i className="fi fi-rr-marker elementIcone"></i><span className={styles.elementText}>Appareils</span></span></li>
+                    <li onClick={() => onMenuItemClick('account')} className={styles.element}><span className={styles.elementContent}><i className="fi fi-rr-user elementIcone"></i><span className={styles.elementText}>Compte</span></span></li>
                 </ul>
             </nav>
 

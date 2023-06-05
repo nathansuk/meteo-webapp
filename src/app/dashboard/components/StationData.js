@@ -31,6 +31,7 @@ export default function StationData()
         getStationData()
     }, [])
 
+
     return (
         
         <div className={styles.statsBoxes}>

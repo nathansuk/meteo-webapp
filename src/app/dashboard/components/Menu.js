@@ -19,7 +19,7 @@ export default function Menu({ firstName, lastName, onMenuItemClick})
 
         <div className={styles.navigationContent}>
 
-        <h1 className={styles.navigationTitle}>Meteo</h1>
+        <h1 className={styles.navigationTitle}>T-laloc</h1>
 
         <div className={styles.navigationUserBox}>
 

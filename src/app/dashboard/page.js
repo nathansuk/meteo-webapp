@@ -1,17 +1,17 @@
 'use client'
 import styles from './styles.module.css'
-import Image from 'next/image'
-import React from 'react'
+import {React, ReactDOM} from 'react'
 import {useState, useEffect} from 'react'
-import StatisticBox from './components/StatisticBox'
-import StationData from './components/StationData'
 import Menu from './components/Menu'
 import Landing from './components/Landing/Landing'
+import Account from './components/Account/Account'
+import Modal from './components/Modal'
 
 export default function Dashboard()
 {
     const [user, setUser] = useState({})
     const [pageContent, setPageContent] = useState(<Landing />)
+    const [errors, setErrors] = useState([])
 
     async function getUser(token) {
 
@@ -46,7 +46,13 @@ export default function Dashboard()
             return
         }
 
-        getUser(token)
+        const user = getUser(token)
+
+        if(!user) 
+        {
+            window.location.href = '/login'
+            console.log("Utilisateur inexistant")
+        }
     }, [])
 
     const handleMenuClick = (content) => {
@@ -58,22 +64,32 @@ export default function Dashboard()
               console.log('Appareils')
               break;
             case 'account':
-              console.log('Mon compte')
+              setPageContent(<Account />)
               break;
             default:
               setPageContent(<Landing />);
           }
     }
 
+    const modalData = {
+        name: "Température"
+    }
+
+    const handleClick = () => {
+        console.log("clicked on")
+    }
 
     return (
 
         <main className={styles.dashboardMain}>
                 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'></link>
                 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'></link>
+                
+                <Modal modalDatas={modalData} />
 
                 <Menu firstName={user.firsName} lastName={user.lastName} onMenuItemClick={handleMenuClick}/>
 
+                
                 <div className={styles.dashboardContent}>
 
                     { pageContent }

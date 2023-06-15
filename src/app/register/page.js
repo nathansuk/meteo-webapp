@@ -41,6 +41,9 @@ export default function Register()
                 setErrors(jsonResponse.errors)
                 setButtonText("Inscription")
             }
+            else {
+                window.location.href = '/login'
+            }
             
         } catch(err) {
             console.log(err)

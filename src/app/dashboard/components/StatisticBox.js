@@ -73,6 +73,7 @@ function StatisticBox({ statName, datas }) {
     
         setDataValue(values);
         setDataDates(dates);
+        console.log('changement')
       }, [datas, statName]);
 
     const labels = dataDates

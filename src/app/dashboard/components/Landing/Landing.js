@@ -16,17 +16,10 @@ export default function Landing()
                     <h2>Nombre de station</h2>
                     <div className={styles.boxContent}>
                         <i class="fi fi-sr-marker dashboardContentBoxIcon" style={{marginRight: 30, marginTop: 30}}></i>
-                        <h1>5</h1>
+                        <h1>0</h1>
                     </div>
                 </div>
 
-                <div className={styles.dashboardContentBox}>
-                    <h2>Stat au pif</h2>
-                    <div className={styles.boxContent}>
-                        <i class="fi fi-sr-info dashboardContentBoxIcon" style={{marginRight: 30, marginTop: 30}}></i>
-                        <h1>38</h1>
-                    </div>
-                </div>
 
                 <div className={styles.dashboardContentBox}>
                     <h2>Ajouter une station</h2>
@@ -38,9 +31,9 @@ export default function Landing()
 
 
             </div>  
-
-            <h2>Station favorite</h2>
+            
             <StationData />
+
 
         </>
     )

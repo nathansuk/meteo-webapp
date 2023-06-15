@@ -6,6 +6,7 @@ import Menu from './components/Menu'
 import Landing from './components/Landing/Landing'
 import Account from './components/Account/Account'
 import Modal from './components/Modal'
+import UserStation from './components/Station/UserStation'
 
 export default function Dashboard()
 {
@@ -47,6 +48,7 @@ export default function Dashboard()
         }
 
         const user = getUser(token)
+        console.log(user)
 
         if(!user) 
         {
@@ -61,7 +63,7 @@ export default function Dashboard()
               setPageContent(<Landing />);
               break;
             case 'apparels':
-              console.log('Appareils')
+              setPageContent(<UserStation />)
               break;
             case 'account':
               setPageContent(<Account />)

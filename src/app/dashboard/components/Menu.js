@@ -26,7 +26,7 @@ export default function Menu({ firstName, lastName, onMenuItemClick})
             <div className={styles.navigationUserBoxPic} style={{
                 width:100 + 'px', 
                 height: 100 + 'px', 
-                backgroundImage: "url('https://p325k7wa.twic.pics/high/cyberpunk/cyberpunk-2077/00-page-setup/cp2077_game-thumbnail.jpg?twic=v1/resize=760/step=10/quality=80')", 
+                backgroundImage: "url('http://localhost:3000/icons/des-arbres.png')", 
                 backgroundSize: 'cover',
                 borderRadius:100 + '%',
                 margin: 'auto',
@@ -36,8 +36,6 @@ export default function Menu({ firstName, lastName, onMenuItemClick})
             <span className={styles.navigationUserBoxName}>
                 {firstName} {lastName}
             </span>
-            
-            <a href="#" className={styles.navigationEditProfile}>Editer mon profil</a>
 
         </div>  
 

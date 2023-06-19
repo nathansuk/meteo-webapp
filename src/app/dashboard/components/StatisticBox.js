@@ -43,8 +43,19 @@ function StatisticBox({ statName, datas }) {
             "name": "Luminosité",
             "unit": "%",
             "icon": "fi-sr-clouds-sun" 
-        }
+        },
+        "rainfall": {
+          "name": "Pluviométrie",
+          "unit": "cl/m2",
+          "icon": "fi fi-sr-cloud-showers" 
+        },
+        "windSpeed": {
+          "name": "Anénomètre",
+          "unit": "km/h",
+          "icon": "fi fi-sr-wind" 
+        },
     }
+    
 
     ChartJS.register(
         CategoryScale,
@@ -68,7 +79,7 @@ function StatisticBox({ statName, datas }) {
         datas.forEach((item) => {
           values.push(item.datas[statName]);
           const dateFormatted = new Date(item.dataDate);
-          dates.push(dateFormatted.getHours() + " : " + dateFormatted.getMinutes());
+          dates.push(dateFormatted.getHours() + ":" + dateFormatted.getMinutes() + ":" + dateFormatted.getSeconds());
         });
     
         setDataValue(values);

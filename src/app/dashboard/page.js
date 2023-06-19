@@ -72,11 +72,6 @@ export default function Dashboard()
               setPageContent(<Landing />);
           }
     }
-
-    const modalData = {
-        name: "Température"
-    }
-
     const handleClick = () => {
         console.log("clicked on")
     }
@@ -86,8 +81,7 @@ export default function Dashboard()
         <main className={styles.dashboardMain}>
                 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'></link>
                 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'></link>
-                
-                <Modal modalDatas={modalData} />
+            
 
                 <Menu firstName={user.firsName} lastName={user.lastName} onMenuItemClick={handleMenuClick}/>
 

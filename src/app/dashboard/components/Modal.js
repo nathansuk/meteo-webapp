@@ -15,12 +15,10 @@ import {
     Legend
   } from 'chart.js';
   import { Bar } from 'react-chartjs-2';
-  import Calendar from 'react-calendar';
 
 
 function Modal(props)
 {
-    const [date, setDate] = useState(new Date());
 
     const [dataValue, setDataValue] = useState([])
     const [dataDates, setDataDates] = useState([])
@@ -28,31 +26,118 @@ function Modal(props)
     const [statValue, setStatValue] = useState({})
     const [isVisible, setIsVisible] = useState(true)
     const [modalDatas, setModalDatas] = useState("")
-    const [stationData, setStationData] = useState({})
-
-    const [isLoadingData, setIsLoadingData] = useState(false)
 
     const [dateDay, setDateDay] = useState(new Date().getDate())
     const [dateMonth, setDateMonth] = useState(new Date().getMonth())
     const [dateYear, setDateYear] = useState(new Date().getFullYear())
 
+    const dataInfo = {
+      "pressure": {
+          "name": "Pression",
+          "unit": "mBar",
+          "icon": "fi-sr-bars-progress" 
+      },
+      "temperature": {
+          "name": "Température",
+          "unit": "°C",
+          "icon": "fi-sr-temperature-high" 
+      },
+      "humidity": {
+          "name": "Humidité",
+          "unit": "%",
+          "icon": "fi fi-sr-humidity" 
+      },
+      "luminosity": {
+          "name": "Luminosité",
+          "unit": "%",
+          "icon": "fi-sr-clouds-sun" 
+      },
+      "rainfall": {
+        "name": "Pluviométrie",
+        "unit": "cl/m2",
+        "icon": "fi-sr-cloud-drizzle" 
+      },
+      "windSpeed": {
+        "name": "Anénomètre",
+        "unit": "km/h",
+        "icon": "fi fi-sr-wind" 
+      },
+  }
 
-    const handleCloseModal = () => {
-        setIsVisible(false)
+
+    // Fonction pour formater l'heure au format HH:MM
+    function formatHeure(date) {
+      const heure = new Date(date).getUTCHours();
+      return ('0' + heure).slice(-2) + ':00';
     }
+
 
     async function getStationData()
     {
-      setIsLoadingData(true)
+      console.log("Récupération des données du : "+dateYear+'-'+ dateMonth +'-'+ dateDay)
         try {
 
-            const response = await fetch('/station/data/ESIEE-1', {
+            const response = await fetch('/station/data/ESIEE-1/'+dateYear+'-'+dateMonth+'-'+dateDay, {
                 method: 'GET'
             })
 
             const data = await response.json()
-            setStationData(data)
+            const lignesParHeure = {};
+          
+          // Parcours du tableau de JSON
+          data.forEach(json => {
+            // Extraction de l'heure du champ "dataDate"
+            const heure = formatHeure(json.dataDate);
             
+            // Vérification si l'heure existe déjà dans l'objet "lignesParHeure"
+            if (lignesParHeure.hasOwnProperty(heure)) {
+              // Si l'heure existe, on ajoute la ligne JSON à l'heure correspondante
+              lignesParHeure[heure].push(json);
+            } else {
+              // Si l'heure n'existe pas, on crée un nouveau tableau avec la ligne JSON
+              lignesParHeure[heure] = [json];
+            }
+          });
+
+          const statArray = []
+
+          // Affichage des lignes JSON classées par heure
+          for (const heure in lignesParHeure) {
+
+            //console.log(`Heure ${heure}:`);
+
+            const sommeProprietes = {
+              humidity: 0,
+              temperature: 0,
+              pressure: 0,
+              luminosity: 0
+            };
+            
+            let nombreElements = 0;
+
+
+            lignesParHeure[heure].forEach(json => {
+                sommeProprietes.humidity += json.datas.humidity;
+                sommeProprietes.temperature += json.datas.temperature;
+                sommeProprietes.pressure += json.datas.pressure;
+                sommeProprietes.luminosity += json.datas.luminosity;
+                nombreElements++;
+            });
+
+            const moyenneProprietes = {
+              humidity: sommeProprietes.humidity / nombreElements,
+              temperature: sommeProprietes.temperature / nombreElements,
+              pressure: sommeProprietes.pressure / nombreElements,
+              luminosity: sommeProprietes.luminosity / nombreElements
+            };
+
+            console.log(modalDatas["name"] + "" + moyenneProprietes[modalDatas["name"]])
+
+            statArray.push(Math.round(moyenneProprietes[modalDatas["name"]]))
+          
+            //console.log('Moyenne des propriétés :', moyenneProprietes);
+          }
+          setDataValue(statArray)
 
         } catch(err) {
             console.log("Erreur lors de la récupération des données de la station" + err)
@@ -60,20 +145,10 @@ function Modal(props)
         }
     }
 
-      const filterData = () => {
-        console.log("zebi")
-        const filteredData = stationData.filter(item => {
-          const itemDate = new Date(item.dataDate);
-          return itemDate.toDateString() === date.toDateString();
-        });
-
-        console.log("DATA FILTREES : " + filteredData)
-      }
-
       const handleDateForm = (e) => {
         e.preventDefault()
-        setDate(new Date(dateYear, dateMonth, dateDay))
-        console.log(date)
+        getStationData()
+        
       }
     
 
@@ -120,51 +195,87 @@ function Modal(props)
       const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length; //https://stackoverflow.com/questions/10359907/how-to-compute-the-sum-and-average-of-elements-in-an-array
 
     useEffect( () => {
-        //getStationData()
-        setIsLoadingData(false)
-        setDataValue([-5, 41, 42, 32, 31, 45, 56, 41, 42, 32, 31, 45, 56, 41, 42, 32, 31, 45, 56, 41, 42, 32, 31, 45, 56])
-        setDataDates([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,24])
+        getStationData()
+        setDataDates([
+          "00h-01h", 
+          "01h-02h", 
+          "02h-03h", 
+          "03h-04h", 
+          "04h-05h", 
+          "05h-06h", 
+          "06h-07h", 
+          "07h-08h", 
+          "08h-09h",
+          "09h-10h", 
+          "10h-11h", 
+          "11h-12h", 
+          "12h-13h", 
+          "13h-14h", 
+          "14h-15h", 
+          "15h-16h", 
+          "16h-17h", 
+          "17h-18h", 
+          "18h-19h", 
+          "19h-20h",
+          "20h-21h", 
+          "21h-22h", 
+          "22h-23h", 
+          "23h-00h",])
         setStatValue([Math.max(...dataValue), Math.min(...dataValue), Math.floor(average(dataValue))])
-        setModalDatas(props.modalDatas)
-    }, [])
+    }, [modalDatas])
 
-    const handleSelectChange = (e) => {
-        const option = e.target.value
-        console.log("Changement" + option)
-        setDataValue([41, 42, 32, 31, 45, 56, 89, 100])
-        setDataDates([1, 2, 3, 4, 5, 6, 7, 8])
-        setStatValue([Math.max(...dataValue), Math.min(...dataValue), Math.floor(average(dataValue))])
+    const handleStatButtonClick = (typeOfData) => {
+      const datas = {
+        "name": typeOfData
+      }
+      setModalDatas(datas)
+      getStationData()
+      console.log(datas)
     }
+
     
     if(isVisible){
     return(
 
             <div className={styles.modal}>
+            <h2>Statistiques détaillées</h2>
+
+            <div className={styles.selectStat}>
+               <button onClick={(e) => handleStatButtonClick("temperature")}><i class="fi fi-sr-temperature-high"></i></button>
+               <button onClick={(e) => handleStatButtonClick("humidity")}><i class="fi fi fi-sr-humidity"></i></button>
+               <button onClick={(e) => handleStatButtonClick("luminosity")}><i class="fi fi-sr-brightness-low"></i></button>
+               <button onClick={(e) => handleStatButtonClick("pressure")}><i class="fi fi-sr-bars-progress"></i></button>
+               <button onClick={(e) => handleStatButtonClick("windSpeed")}><i class="fi fi-sr-wind"></i></button>
+               <button onClick={(e) => handleStatButtonClick("rainfall")}><i class="fi-sr-cloud-drizzle"></i></button>
+
+            </div>
             
             <div className={styles.modalContent}>
 
                 <div className={styles.modalContentHead}>
-                    <h1>{ modalDatas["name"] }</h1>
+                    <h1>{ (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["name"] : "Sélectionnez un capteur ci-dessus" }</h1>
 
-                    <button onClick={handleCloseModal}><i class= "fi fi-sr-cross-circle"></i></button>
+                    { 
+                      //--<button onClick={handleCloseModal}><i class= "fi fi-sr-cross-circle"></i></button> 
+                    }
                 </div>         
 
-                    <h3>Données du : {date.toLocaleDateString("fr")} </h3>
+                    <h3>Données du : {dateDay} / { parseInt(dateMonth) + 1 } / { dateYear } </h3>
                     <Bar options={options} data={data} />
                     <div className={styles.modalStats}>
-                    <h3>Valeurs</h3>
+                    <h3>Statistiques de la journée : </h3>
                     <div className={styles.modalStatBox}>
-                        <h2>{statValue[2]} °C</h2>
+                        <h2>{statValue[2]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
                         <span>Moyenne</span>
                     </div>
 
                     <div className={styles.modalStatBox}>
-                        <h2>{statValue[0]} °C</h2>
+                        <h2>{statValue[0]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
                         <span>Max.</span>
                     </div>
 
                     <div className={styles.modalStatBox}>
-                        <h2>{statValue[1]} °C</h2>
+                        <h2>{statValue[1]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
                         <span>Min.</span>
                     </div>
                     
@@ -176,8 +287,22 @@ function Modal(props)
                 <form className={styles.modalDateForm} onSubmit={(e) => {
                   handleDateForm(e)
                 }}>
-                  <input type='number' placeholder='Jour' onChange={(e) => setDateDay(e.target.value)} value={dateDay}></input>
-                  <input type='number' placeholder='Mois' onChange={(e) => setDateMonth(e.target.value)} value={dateMonth}></input>
+                  <h3>Voir les données du :</h3>
+                  <input type='number' placeholder='Jour' onChange={(e) => setDateDay(e.target.value)} value={dateDay}></input> / 
+                  <select id="month" className={styles.monthSelect} onChange={(e) => setDateMonth(e.target.value)} value={dateMonth}>
+                    <option value="0">Janvier</option>
+                    <option value="1">Février</option>
+                    <option value="2">Mars</option>
+                    <option value="3">Avril</option>
+                    <option value="4">Mai</option>
+                    <option value="5">Juin</option>
+                    <option value="6">Juillet</option>
+                    <option value="7">Août</option>
+                    <option value="8">Septembre</option>
+                    <option value="9">Octobre</option>
+                    <option value="10">Novembre</option>
+                    <option value="11">Décembre</option>
+                  </select>/  
                   <input type='number' placeholder='Année' onChange={(e) => setDateYear(e.target.value)} value={dateYear}></input>
                   <button type='submit'>Chercher</button>
                 </form>

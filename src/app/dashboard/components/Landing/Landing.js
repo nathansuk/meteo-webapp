@@ -3,9 +3,15 @@ import Image from 'next/image'
 import React from 'react'
 import {useState, useEffect} from 'react'
 import StationData from '../StationData'
+import Modal from '../Modal'
 
 export default function Landing()
 {
+
+    const modalData = {
+        name: "temperature"
+    }
+
     return(
         <>
             <h1>Bienvenue, </h1>
@@ -33,6 +39,8 @@ export default function Landing()
             </div>  
             
             <StationData />
+
+            <Modal modalDatas={modalData} />
 
 
         </>

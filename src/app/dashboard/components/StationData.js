@@ -1,11 +1,13 @@
 import styles from '../styles.module.css'
 import react from 'react'
 import StatisticBox from './StatisticBox'
-import {useState, useEffect} from 'react'
-import { io } from 'socket.io-client';
+import {useState, useEffect, useRef} from 'react'
 
 export default function StationData()
 {
+
+    const [isPaused, setPause] = useState(false);
+    const ws = useRef(null);
 
     const [errors, setErrors] = useState([])
     const [stationData, setStationData] = useState([])
@@ -29,29 +31,42 @@ export default function StationData()
         }
     }
 
-    useEffect( () => {
+    useEffect(() => {
+        ws.current = new WebSocket("ws://185.163.127.5:8080");
         
-        const socket = io("ws://localhost:3001")
-
-        socket.onopen = () => {
-            console.log("Connexion établie avec le serveur socket")
+        ws.current.onopen = () => {
+            console.log("Websocket on")
             setIsConnectedToSocket(true)
         }
+        ws.current.onclose = () => {
+            console.log("Websocket off")
+            setIsConnectedToSocket(false)
+        }
 
-        socket.on("data", data => {
-            console.log("DONNEES RECUES DEPUIS LE SERVEUR SOCKET" + JSON.stringify(data))
-            
-            let newData = stationData.slice()
-            newData.push(data)
-            if(newData.length > 10) {
-                newData.shift()
+        ws.current.addEventListener('message', function (event) {
+            console.log('Voici un message du serveur', event.data);
+          });
+
+        const wsCurrent = ws.current;
+
+        return () => {
+            wsCurrent.close();
+        };
+    }, []);
+
+    useEffect(() => {
+        ws.current.onmessage = event => {
+            console.log("e", JSON.parse(event.data));
+
+            let newData = stationData.slice();
+            newData.push(JSON.parse(event.data));
+            if (newData.length > 10) {
+                newData.shift();
             }
-            setStationData(newData)
-            console.log(stationData)
-        })
-    
+            setStationData(newData);
+        };
+    }, [isPaused, stationData]);
 
-    }, [stationData])
 
 
     return (
@@ -69,6 +84,8 @@ export default function StationData()
                 <StatisticBox statName="humidity" datas={stationData} unitName="%" />
                 <StatisticBox statName="temperature" datas={stationData} unitName="°C" />
                 <StatisticBox statName="luminosity" datas={stationData} unitName="%" />
+                <StatisticBox statName="windSpeed" datas={stationData} unitName="km/h" />
+                <StatisticBox statName="rainfall" datas={stationData} unitName="litre/zeubi" />
             </div>
         </>
 

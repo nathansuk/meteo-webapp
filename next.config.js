@@ -15,8 +15,8 @@ const nextConfig = {
             destination: "http://localhost:8080/user/get/:token",
           },
           {
-            source: "/station/data/:stationId",
-            destination: "http://localhost:8080/station/data/:stationId",
+            source: "/station/data/:stationId/:year-:month-:day",
+            destination: "http://localhost:8080/station/data/:stationId/:year-:month-:day",
           },
           {
             source: "/user/change-infos",

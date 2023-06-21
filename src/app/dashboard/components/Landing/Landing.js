@@ -8,9 +8,36 @@ import Modal from '../Modal'
 export default function Landing()
 {
 
+    const [stationNumber, setStationNumber] = useState(0)
+    async function getUser(token) {
+        try {
+            const response = await fetch('/user/get/'+token, {
+                method: 'GET'
+            })
+    
+            const data = await response.json()
+            console.log(data)
+            if(data.errors) {
+                setErrors(data.errors)
+                console.log("Erreur" + errors)
+                return
+            }
+            setStationNumber(data["userStations"].length)
+            setFavoriteStation(data["userStations"][0]["stationName"])
+    
+        } catch(err) {
+            console.log(err)
+        }
+    
+    }
+
     const modalData = {
         name: "temperature"
     }
+
+    useEffect(() => {
+        getUser(localStorage.getItem('session_token'))
+    }, [])
 
     return(
         <>
@@ -22,7 +49,7 @@ export default function Landing()
                     <h2>Nombre de station</h2>
                     <div className={styles.boxContent}>
                         <i class="fi fi-sr-marker dashboardContentBoxIcon" style={{marginRight: 30, marginTop: 30}}></i>
-                        <h1>0</h1>
+                        <h1>{stationNumber}</h1>
                     </div>
                 </div>
 

@@ -83,7 +83,7 @@ export default function Dashboard()
                 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'></link>
             
 
-                <Menu firstName={user.firsName} lastName={user.lastName} onMenuItemClick={handleMenuClick}/>
+                <Menu firstName={user.firstName} lastName={user.lastName} onMenuItemClick={handleMenuClick}/>
 
                 
                 <div className={styles.dashboardContent}>

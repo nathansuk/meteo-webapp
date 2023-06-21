@@ -26,6 +26,14 @@ const nextConfig = {
             source: "/user/change-password",
             destination: "http://localhost:8080/user/change-password",
           },
+          {
+            source: "/user/add-station",
+            destination: "http://localhost:8080/user/add-station",
+          },
+          {
+            source: "/user/fav-station",
+            destination: "http://localhost:8080/user/fav-station",
+          },
         ];
       },
 }

@@ -80,12 +80,12 @@ export default function StationData()
                 }
             </h3>
             <div className={styles.statsBoxes}>
-                <StatisticBox statName="pressure" datas={stationData} unitName="mBar" />
-                <StatisticBox statName="humidity" datas={stationData} unitName="%" />
                 <StatisticBox statName="temperature" datas={stationData} unitName="°C" />
+                <StatisticBox statName="humidity" datas={stationData} unitName="%" />
+                <StatisticBox statName="pressure" datas={stationData} unitName="mBar" />
                 <StatisticBox statName="luminosity" datas={stationData} unitName="%" />
                 <StatisticBox statName="windSpeed" datas={stationData} unitName="km/h" />
-                <StatisticBox statName="rainfall" datas={stationData} unitName="litre/zeubi" />
+                <StatisticBox statName="rainfall" datas={stationData} unitName="cl/m2" />
             </div>
         </>
 

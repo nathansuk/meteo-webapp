@@ -110,7 +110,9 @@ function Modal(props)
               humidity: 0,
               temperature: 0,
               pressure: 0,
-              luminosity: 0
+              luminosity: 0,
+              rainfall: 0,
+              windSpeed: 0
             };
             
             let nombreElements = 0;
@@ -120,7 +122,9 @@ function Modal(props)
                 sommeProprietes.humidity += json.datas.humidity;
                 sommeProprietes.temperature += json.datas.temperature;
                 sommeProprietes.pressure += json.datas.pressure;
-                sommeProprietes.luminosity += json.datas.luminosity;
+                sommeProprietes.luminosity += json.datas.luminosity,
+                sommeProprietes.rainfall += json.datas.rainfall,
+                sommeProprietes.windSpeed += json.datas.windSpeed;
                 nombreElements++;
             });
 
@@ -128,12 +132,19 @@ function Modal(props)
               humidity: sommeProprietes.humidity / nombreElements,
               temperature: sommeProprietes.temperature / nombreElements,
               pressure: sommeProprietes.pressure / nombreElements,
-              luminosity: sommeProprietes.luminosity / nombreElements
+              luminosity: sommeProprietes.luminosity / nombreElements,
+              rainfall: sommeProprietes.rainfall / nombreElements,
+              windSpeed: sommeProprietes.windSpeed / nombreElements
             };
 
             console.log(modalDatas["name"] + "" + moyenneProprietes[modalDatas["name"]])
-
-            statArray.push(Math.round(moyenneProprietes[modalDatas["name"]]))
+            
+            if(modalDatas["name"] === "rainfall") {
+              statArray.push(moyenneProprietes[modalDatas["name"]])
+            } else {
+              statArray.push(Math.round(moyenneProprietes[modalDatas["name"]]))
+            }
+            
           
             //console.log('Moyenne des propriétés :', moyenneProprietes);
           }
@@ -255,35 +266,30 @@ function Modal(props)
                 <div className={styles.modalContentHead}>
                     <h1>{ (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["name"] : "Sélectionnez un capteur ci-dessus" }</h1>
 
-                    { 
-                      //--<button onClick={handleCloseModal}><i class= "fi fi-sr-cross-circle"></i></button> 
-                    }
                 </div>         
 
                     <h3>Données du : {dateDay} / { parseInt(dateMonth) + 1 } / { dateYear } </h3>
-                    <Bar options={options} data={data} />
                     <div className={styles.modalStats}>
-                    <h3>Statistiques de la journée : </h3>
-                    <div className={styles.modalStatBox}>
-                        <h2>{statValue[2]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
-                        <span>Moyenne</span>
-                    </div>
+                      <h3>Statistiques de la journée : </h3>
+                      <div className={styles.modalStatBox}>
+                          <h2>{statValue[2]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
+                          <span>Moyenne</span>
+                      </div>
 
-                    <div className={styles.modalStatBox}>
-                        <h2>{statValue[0]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
-                        <span>Max.</span>
-                    </div>
+                      <div className={styles.modalStatBox}>
+                          <h2>{statValue[0]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
+                          <span>Max.</span>
+                      </div>
 
-                    <div className={styles.modalStatBox}>
-                        <h2>{statValue[1]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
-                        <span>Min.</span>
-                    </div>
-                    
+                      <div className={styles.modalStatBox}>
+                          <h2>{statValue[1]} { (dataInfo.hasOwnProperty(modalDatas["name"])) ? dataInfo[modalDatas["name"]]["unit"] : " " }</h2>
+                          <span>Min.</span>
+                      </div>
+                      
                     </div>
                    
-                
-
-
+                    <Bar options={options} data={data} />
+              
                 <form className={styles.modalDateForm} onSubmit={(e) => {
                   handleDateForm(e)
                 }}>
